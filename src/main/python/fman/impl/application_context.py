@@ -33,10 +33,9 @@ from fman.impl.util import os_
 from fman.impl.util.qt import connect_once
 from fman.impl.util.settings import Settings
 from fman.impl.view import ProxyStyle
-from fman.impl.widgets import MainWindow, SplashScreen, Application
+from fman.impl.widgets import MainWindow, Application
 from os import makedirs
 from os.path import dirname, join
-from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor, QPalette
 from PyQt5.QtWidgets import QStyleFactory, QFileIconProvider
 
@@ -94,13 +93,10 @@ class DevelopmentApplicationContext(ApplicationContext):
 				self.metrics.update_user(
 					is_licensed=True, email=self.user.email
 				)
-		else:
-			if self.session_manager.is_first_run:
-				pane = self.plugin_support.get_panes()[0]
-				tutorial = self.tutorial_factory(pane)
-				self.tour_controller.start(tutorial)
-			else:
-				self.splash_screen.exec()
+		elif self.session_manager.is_first_run:
+			pane = self.plugin_support.get_panes()[0]
+			tutorial = self.tutorial_factory(pane)
+			self.tour_controller.start(tutorial)
 	def on_main_window_close(self):
 		self.session_manager.on_close(self.main_window)
 	def on_quit(self):
@@ -209,16 +205,6 @@ class DevelopmentApplicationContext(ApplicationContext):
 	def config(self):
 		return Config(PLATFORM)
 	@cached_property
-	def splash_screen(self):
-		user = self.user
-		license_expired = user.has_license() and \
-						  not user.license_is_valid_for_curr_version(
-							  self.fman_version
-						  )
-		return SplashScreen(
-			self.main_window, self.app, license_expired, user.email
-		)
-	@cached_property
 	def tour_controller(self):
 		return TourController()
 	@cached_property
@@ -315,25 +301,30 @@ class DevelopmentApplicationContext(ApplicationContext):
 		return backend
 	@cached_property
 	def palette(self):
+		# Catppuccin Mocha
 		result = QPalette()
-		result.setColor(QPalette.Window, QColor(43, 43, 43))
-		result.setColor(QPalette.WindowText, Qt.white)
-		result.setColor(QPalette.Base, QColor(19, 19, 19))
-		result.setColor(QPalette.AlternateBase, QColor(66, 64, 59))
-		result.setColor(QPalette.ToolTipBase, QColor(19, 19, 19))
-		result.setColor(QPalette.ToolTipText, Qt.white)
-		result.setColor(QPalette.Light, QColor(0x49, 0x48, 0x3E))
-		result.setColor(QPalette.Midlight, QColor(0x33, 0x33, 0x33))
-		result.setColor(QPalette.Button, QColor(0x29, 0x29, 0x29))
-		result.setColor(QPalette.Mid, QColor(0x25, 0x25, 0x25))
-		result.setColor(QPalette.Dark, QColor(0x20, 0x20, 0x20))
-		result.setColor(QPalette.Shadow, QColor(0x1d, 0x1d, 0x1d))
-		result.setColor(QPalette.Text, Qt.white)
+		result.setColor(QPalette.Window, QColor(0x1e, 0x1e, 0x2e))
+		result.setColor(QPalette.WindowText, QColor(0xcd, 0xd6, 0xf4))
+		result.setColor(QPalette.Base, QColor(0x11, 0x11, 0x1b))
+		result.setColor(QPalette.AlternateBase, QColor(0x31, 0x32, 0x44))
+		result.setColor(QPalette.ToolTipBase, QColor(0x31, 0x32, 0x44))
+		result.setColor(QPalette.ToolTipText, QColor(0xcd, 0xd6, 0xf4))
+		result.setColor(QPalette.Light, QColor(0x45, 0x47, 0x5a))
+		result.setColor(QPalette.Midlight, QColor(0x31, 0x32, 0x44))
+		result.setColor(QPalette.Button, QColor(0x31, 0x32, 0x44))
+		result.setColor(QPalette.Mid, QColor(0x1e, 0x1e, 0x2e))
+		result.setColor(QPalette.Dark, QColor(0x18, 0x18, 0x25))
+		result.setColor(QPalette.Shadow, QColor(0x11, 0x11, 0x1b))
+		result.setColor(QPalette.Text, QColor(0xcd, 0xd6, 0xf4))
 		result.setColor(
-			QPalette.ButtonText, QColor(0xb6, 0xb3, 0xab)
+			QPalette.ButtonText, QColor(0xcd, 0xd6, 0xf4)
 		)
-		result.setColor(QPalette.Link, Qt.white)
-		result.setColor(QPalette.LinkVisited, Qt.white)
+		result.setColor(QPalette.Highlight, QColor(0xcb, 0xa6, 0xf7))
+		result.setColor(
+			QPalette.HighlightedText, QColor(0x1e, 0x1e, 0x2e)
+		)
+		result.setColor(QPalette.Link, QColor(0x89, 0xb4, 0xfa))
+		result.setColor(QPalette.LinkVisited, QColor(0xb4, 0xbe, 0xfe))
 		# Prevent blue highlight around buttons when the window (/dialog) is in
 		# the background and thus inactive:
 		result.setColor(
@@ -361,7 +352,7 @@ class DevelopmentApplicationContext(ApplicationContext):
 	@cached_property
 	def main_window_palette(self):
 		result = QPalette(self.palette)
-		result.setColor(QPalette.Window, QColor(0x44, 0x44, 0x44))
+		result.setColor(QPalette.Window, QColor(0x18, 0x18, 0x25))
 		return result
 	@cached_property
 	def progress_bar_palette(self):

@@ -1,27 +1,27 @@
 QMenu {
 	font-family: "Helvetica Neue";
-	color: #333333;
+	color: #cdd6f4;
 	font-size: 14pt;
-	background-color: #f6f6f6;
+	background-color: #1e1e2e;
 	padding-top: .75ex;
 	padding-bottom: .75ex;
 	/* border-radius is set in the `Menu` class in fman */
 }
 
 QMenu::item {
-	background-color: #f6f6f6;
+	background-color: #1e1e2e;
 	padding: .35ex 1.5ex .3ex 3ex;
 	min-width: 25ex;
 }
 
 QMenu::item:selected {
-	background-color: #0763d8;
-	color: white;
+	background-color: #45475a;
+	color: #cdd6f4;
 }
 
 QMenu::separator {
 	height: 2px;
-	background: #e5e5e5;
+	background: #313244;
 	margin: .75ex 0;
 }
 

@@ -1,14 +1,14 @@
 * {
-	font-size: 9pt;
+	font-size: 10pt;
 }
 
 th {
-	font-size: 8pt;
+	font-size: 9pt;
 }
 
 .locationbar {
 	padding: 0.25ex;
-	border-bottom: 1px solid #262626;
+	border-bottom: 1px solid #313244;
 }
 
 .statusbar {
@@ -16,30 +16,30 @@ th {
 }
 
 .quicksearch-query, .quicksearch-item-title {
-	font-size: 10pt;
+	font-size: 11pt;
 }
 
 .quicksearch-item {
 	padding-top: 1px;
 	padding-left: 4px;
 	padding-right: 4px;
-	border-top: 1px solid #4d4d4d;
-	border-bottom: 1px solid #363636;
+	border-top: 1px solid #45475a;
+	border-bottom: 1px solid #313244;
 }
 
 .quicksearch-item-title {
-	color: #c8c8c8;
+	color: #cdd6f4;
 }
 
 .quicksearch-item-title-highlight {
-	color: white;
+	color: #cba6f7;
 }
 
 .quicksearch-item-hint {
 	font-size: 8pt;
-	color: white;
+	color: #bac2de;
 }
 
 .quicksearch-item-description {
-	color: #8f908a;
+	color: #7f849c;
 }

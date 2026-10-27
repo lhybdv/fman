@@ -3,8 +3,10 @@ from fman.impl.util.qt import Key_Tab, Key_Down, Key_Up, Key_PageDown, \
 	Key_Home, Key_End, Key_PageUp, UserRole, AlignRight, AlignVCenter, \
 	NoFocus, FramelessWindowHint, AlignTop, AccessibleTextRole
 from PyQt5.QtCore import QAbstractListModel, QVariant, QModelIndex, QSize, \
+Qt, \
 	QPointF, QRectF, QPoint, pyqtSignal
-from PyQt5.QtGui import QFont, QTextLayout, QTextCharFormat, QBrush, \
+from PyQt5.QtGui import QFont, QFontMetrics, QTextLayout, \
+QTextCharFormat, QBrush, \
 	QKeySequence
 from PyQt5.QtWidgets import QDialog, QLayout, QFrame, QVBoxLayout, QLineEdit, \
 	QListView, QStyledItemDelegate, QApplication, QStyle
@@ -236,7 +238,15 @@ class QuicksearchItemRenderer:
 		painter.setFont(font)
 		painter.setPen(self._css['hint']['color'])
 		rect = self._get_title_rect()
-		painter.drawText(rect, AlignRight | AlignVCenter, self._hint)
+		# Right-align the hint, but never let it overlap the title. For long
+		# hints such as paths, elide on the left so the end stays visible:
+		gap = 8
+		available = rect.width() - self._layout_title()[1] - gap
+		if available <= 0:
+			return
+		metrics = QFontMetrics(font)
+		hint = metrics.elidedText(self._hint, Qt.ElideLeft, int(available))
+		painter.drawText(rect, AlignRight | AlignVCenter, hint)
 	def _draw_description(self, painter):
 		if not self._description:
 			return

@@ -3,7 +3,7 @@ from fman.fs import FileSystem, Column
 from fman.impl.font_database import FontError
 from fman.impl.util import listdir_absolute
 from glob import glob
-from importlib.machinery import SourceFileLoader
+from importlib.util import spec_from_file_location, module_from_spec
 from inspect import getmro
 from json import JSONDecodeError
 from os.path import join, isdir, basename, isfile
@@ -225,8 +225,14 @@ class ExternalPlugin(Plugin):
 			init = join(dir_, '__init__.py')
 			if isfile(init):
 				package_name = basename(dir_)
-				loader = SourceFileLoader(package_name, init)
-				yield loader.load_module()
+				# `SourceFileLoader.load_module()` was removed in Python 3.12.
+				spec = spec_from_file_location(
+					package_name, init, submodule_search_locations=[dir_]
+				)
+				module = module_from_spec(spec)
+				sys.modules[package_name] = module
+				spec.loader.exec_module(module)
+				yield module
 	def _unregister_package(self, package):
 		del sys.modules[package.__name__]
 	def _iterate_classes(self, module):
